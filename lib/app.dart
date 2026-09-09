@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/constants/app_colors.dart';
 import 'router.dart';
 
-// 全局 App 入口
 class TaoyueEduApp extends StatelessWidget {
   const TaoyueEduApp({super.key});
 
