@@ -1,22 +1,22 @@
-name: PR 质量门禁
+name: 主分支自动出 Debug 包（内部分发）
 
-# 触发条件：任何 PR（目标分支是 main）
+# 触发条件：代码合并/推送到 main
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 permissions:
   contents: read
 
 jobs:
-  quality-gate:
-    name: flutter analyze + test
+  build-debug-apk:
+    name: 构建 staging debug APK
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 安装 Flutter（稳定版，含缓存）
+      - name: 安装 Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -25,10 +25,27 @@ jobs:
       - name: 安装依赖
         run: flutter pub get
 
-      # 质量门禁第 1 关：静态检查。有任何 error 输出即失败
-      - name: 静态检查 flutter analyze
-        run: flutter analyze
-
-      # 质量门禁第 2 关：单元测试。有任何失败用例即失败
-      - name: 单元测试 flutter test
+      # 主分支代码也要求过测试（双保险）
+      - name: 单元测试
         run: flutter test
+
+      - name: 计算构建信息
+        id: info
+        run: |
+          echo "short_sha=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          echo "build_number=$(git rev-list --count HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: 构建 staging debug APK
+        run: |
+          flutter build apk --debug --flavor staging \
+            --dart-define=APP_ENV=staging \
+            --dart-define=API_BASE_URL=https://xin1024.top/api/v1 \
+            --dart-define=COMMIT_HASH=${{ steps.info.outputs.short_sha }} \
+            --dart-define=BUILD_NUMBER=${{ steps.info.outputs.build_number }}
+
+      - name: 上传 artifact（Actions 页可直接下载）
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-staging-debug
+          path: build/app/outputs/flutter-apk/app-staging-debug.apk
+          retention-days: 30
