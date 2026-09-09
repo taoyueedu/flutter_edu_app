@@ -11,6 +11,9 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+docs/**
+windows/
+
 
 # IntelliJ related
 *.iml
@@ -43,3 +46,30 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# ---- HarmonyOS (ohos) 平台 ----
+# 鸿蒙签名材料，绝不入库（教程第 10 章 / 附录 D）
+ohos/**/*.p12
+ohos/**/*.cer
+ohos/**/*.p7b
+ohos/**/*.csr
+harmonyos-keyfiles/
+
+# 鸿蒙构建产物（由 DevEco/hvigor 生成，不入库）
+ohos/**/build/
+ohos/.hvigor/
+ohos/oh_modules/  
+
+
+# ---- 签名与密钥：绝不入库 ----
+**/*.keystore
+**/*.jks
+**/*.key
+**/key.properties
+**/android/app/upload-keystore.jks
+**/*.p12
+**/*.mobileprovision
+**/*.cer
+
+# ---- 本地环境文件 ----
+**/ios/exportOptions/*.local.plist

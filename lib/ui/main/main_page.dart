@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../core/constants/app_colors.dart';
-import '../../core/constants/app_dimens.dart';
 import '../home/home_page.dart';
 import '../category/category_page.dart';
 import '../courses/course_list_page.dart';

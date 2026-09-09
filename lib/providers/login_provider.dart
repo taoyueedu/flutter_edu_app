@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/di.dart';
 import '../data/model/user.dart';
+import '../data/repository/auth_repository.dart';
 
 /// 登录状态（对应 Kotlin 版 LoginViewModel + StateFlow 的"当前值"）
 class LoginState {
